@@ -76,15 +76,15 @@ class BaseMusic{
     
     //==getters
   
-    std::string getName();
-    unsigned int getLength();
-    time_t getDate();
-    std::vector<Artist*> getArtists();
-    Artist* getPublisher();
-    std::vector<Tag*> getTags();
-    std::vector<std::string> getPaths();
-    std::vector<std::string> getUrls();
-    bool isFinished();
+    std::string getName()const;
+    unsigned int getLength()const;
+    time_t getDate()const;
+    std::vector<Artist*> getArtists()const;
+    Artist* getPublisher()const;
+    std::vector<Tag*> getTags()const;
+    std::vector<std::string> getPaths()const;
+    std::vector<std::string> getUrls()const;
+    bool isFinished()const;
     
     //==adders
     void addPath(std::string);
