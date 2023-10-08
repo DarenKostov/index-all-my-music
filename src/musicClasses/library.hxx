@@ -17,6 +17,7 @@ If not, see <https://www.gnu.org/licenses/>.
 
 
 
+#include <set>
 #include <unordered_map>
 #include "tag.hxx"
 #include "music/baseMusic.hxx"
@@ -51,8 +52,26 @@ class Library{
 
     //get the artist of a song
     std::unordered_map<BaseMusic*, Artist*> musicToArtist;
-    
 
+    struct MusicDateComparator{
+      bool operator()(const BaseMusic* music1, const BaseMusic* music2)const{
+        return music1->getDate()<music2->getDate();
+      }
+    };
+    struct MusicLengthComparator{
+      bool operator()(const BaseMusic* music1, const BaseMusic* music2)const{
+        return music1->getLength()<music2->getLength();
+      }
+    };
+
+    //get music by date using equal_range, lower_bound, and upper_bound    
+    std::set<BaseMusic*, MusicDateComparator> sortedByDate;
+
+    //get music by duration equal_range, lower_bound, and upper_bound    
+    std::set<BaseMusic*, MusicLengthComparator> sortedByLength;
+
+
+    
     public:
       //makes an empty library
       Library();
