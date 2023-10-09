@@ -31,9 +31,13 @@ class Artist;
 
 class BaseMusic{
 
-  protected:
+  public:
 
     enum type{Music, Remix, Mashup, Edit_Audio};
+
+
+  protected:
+
 
     //is this music fully documented? all tags, all artists?
     bool done;

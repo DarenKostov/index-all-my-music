@@ -16,6 +16,23 @@ If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+/*
+  to change an object and update it do this:
+
+    removeObject(myObject)
+    //update the object in any way
+    addObject(myObject)
+
+  Do NOT use deleteObject() for that purpose
+  
+*/
+
+/*
+  removeObject() does not change the relationship to the removed object with other object
+  for example if you remove an artist, the songs they made still point to that artist
+
+*/
+
 
 #include <set>
 #include <unordered_map>
@@ -24,12 +41,14 @@ If not, see <https://www.gnu.org/licenses/>.
 #include "music/music.hxx"
 #include "music/remix.hxx"
 #include "music/mashup.hxx"
+#include "artist.hxx"
 
 
 class Library{
   private:
     //stores all the music here
-    std::vector<BaseMusic*> music;
+    //might change what data structures store these
+    std::set<BaseMusic*> music;
     std::vector<Tag*> tags;
     std::vector<Artist*> artists;
 
@@ -76,21 +95,71 @@ class Library{
       //makes an empty library
       Library();
   
-      //deconstructor
+      //deconstructor, this does not delete songs
       ~Library();
 
+      //deletes everything in the library, any pointers in it will become invalid
+      void clearLibrary();
+
+      
       //load library from a file path (tags, songs and everything)
       bool loadFromFile(std::string);
 
+      //manage songs
+
       //removes a song from the library
       bool removeMusic(BaseMusic*);
+
+      //deletes a song, itll be gone forever, its pointer will become invalid
+      bool deleteMusic(BaseMusic*);
       
       //adds a song to the Library
+      bool addMusic(BaseMusic*);
       bool addMusic(Music*);
       bool addRemix(Remix*);
-      bool addMashup(Remix*);
+      bool addMashup(Mashup*);
+
+      //updates the position in all the data structures in the library
+      //run it after chaning anything in a particular song
+      //use this instead:
+      /*
+        removeMusic(myMysic);
+        //change the music object in any way
+        addMusic(myMysic);
+
+      */
+      bool updateMusic(BaseMusic*);
+      
+      //=== retrieve/manage tags
+
+      //gives you a list of tags that have a substring in their aliases as the given string
+      std::vector<Tag*> getTags(std::string);
+
+      //adds a tag to the library
+      bool addTag(Tag*);
+       
+      //removes a tag from the library
+      bool removeTag(Tag*);
+
+      //deletes a tag, itll be gone forever, its pointer will become invalid
+      bool deleteTag(Tag*);
+
+      //=== manage artists
+
+      //adds an artist to the library
+      bool addArtist(Artist*);
+      bool addPublisher(Artist*);
+
+      //removes an artist from the library
+      bool removeArtist(Artist*);
+      bool removePublisher(Artist*);
 
 
+      //deletes an artist, will be gone forever
+      bool deleteArtist(Artist*);
+      bool deletePublisher(Artist*);
+
+      
       //=== retrieve songs
       
       //gives you a list of songs, give you provide a tag in the form of a string or the a Tag itself
