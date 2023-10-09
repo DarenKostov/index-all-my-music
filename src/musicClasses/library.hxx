@@ -50,8 +50,8 @@ class Library{
     //get the songs an artist has made
     std::unordered_map<Artist*, std::vector<BaseMusic*>> artistToMusics;
 
-    //get the artist of a song
-    std::unordered_map<BaseMusic*, Artist*> musicToArtist;
+    // //get the artist of a song
+    // std::unordered_map<BaseMusic*, Artist*> musicToArtist;
 
     struct MusicDateComparator{
       bool operator()(const BaseMusic* music1, const BaseMusic* music2)const{
@@ -81,16 +81,78 @@ class Library{
 
       //load library from a file path (tags, songs and everything)
       bool loadFromFile(std::string);
+
+      //removes a song from the library
+      bool removeMusic(BaseMusic*);
       
       //adds a song to the Library
       bool addMusic(Music*);
       bool addRemix(Remix*);
       bool addMashup(Remix*);
+
+
+      //=== retrieve songs
+      
+      //gives you a list of songs, give you provide a tag in the form of a string or the a Tag itself
+      std::vector<BaseMusic*> giveMeSongasBasedOnTag(std::string);
+      std::vector<BaseMusic*> giveMeSongasBasedOnTag(Tag*);
+      
+      //gives you a list of songs (including remixes and mashups), give you provide a tag in the form of a string or the a Tag itself
+      std::vector<BaseMusic*> giveMeSongsBasenOnTagInclusive(std::string);
+      std::vector<BaseMusic*> giveMeSongsBasenOnTagInclusive(Tag*);
+      
+      //gives you a list of songs based on who's artist's name or pointer you give
+      std::vector<BaseMusic*> giveMeSongsBasesOnArtist(std::string);
+      std::vector<BaseMusic*> giveMeSongsBasesOnArtist(Artist*);
+  
+      //gives you a list of songs based on who's publisher's name or pointer you give
+      std::vector<BaseMusic*> giveMeSongsBasesOnPublisher(std::string);
+      std::vector<BaseMusic*> giveMeSongsBasesOnPublisher(Artist*);
+
+      //gives you all the remixes of this song
+      std::vector<BaseMusic*> giveMeRemixesOfSong(BaseMusic*);
+        
+      //gives you all the mashups that use this song
+      std::vector<BaseMusic*> giveMeMashupsOfSong(BaseMusic*);
+
+      //gives you all the remixes and mashups of this song
+      std::vector<BaseMusic*> giveMeAltersOfSong(BaseMusic*);
+  
+      //gives you the original song of a particular remix
+      BaseMusic* giveMeOriginalOfRemix(Remix*);
+  
+      //gives you the compound songs of a particular mashup
+      std::vector<BaseMusic*> giveMeOriginalsOfMashup(Mashup*);
+
+      //give it a tag and a vector of songs and itll remove songs with the specified tag
+      void removeSongsWithATag(std::string, std::vector<BaseMusic*>&);
+      void removeSongsWithATag(Tag*, std::vector<BaseMusic*>&);
+
+      //give it a artist and a vector of songs and itll remove songs with the specified artist
+      void removeSongsWithAnArtist(std::string, std::vector<BaseMusic*>&);
+      void removeSongsWithAnArtist(Tag*, std::vector<BaseMusic*>&);
+    
+      //give it a publisher and a vector of songs and itll remove songs with the specified publisher
+      void removeSongsWithAPublisher(std::string, std::vector<BaseMusic*>&);
+      void removeSongsWithAPublisher(Tag*, std::vector<BaseMusic*>&);
+
+      //get a list of songs that have the given substring in their name
+      std::vector<BaseMusic*> getSongsWithName(std::string);
+      
+      //get a list of songs that have the given substring in their name, case sensitive
+      std::vector<BaseMusic*> getSongsWithNameCaseSensitive(std::string);
+
+      //gives you songs that were made/published in a specific time range
+      std::vector<BaseMusic*> getSongsInTimeRange(time_t, time_t);
+  
+      //gives you songs that last a duration a between specific durations
+      std::vector<BaseMusic*> getSongsInDurationRange(uint, uint);
+
       
   
   
   
   
-        
+  
   
 };
