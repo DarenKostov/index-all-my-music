@@ -19,6 +19,7 @@ If not, see <https://www.gnu.org/licenses/>.
 #include "music/baseMusic.hxx"
 #include <type_traits>
 
+//removes a specific elemnt from a vector
 template<class T>
 void removeFromVector(std::vector<T>&, T);
 
@@ -58,8 +59,35 @@ bool Library::loadFromFile(std::string path){
 bool Library::removeMusic(BaseMusic* targetSong){
 
   music.erase(targetSong);
-  
+  //remove this song from every tag
+  for(auto tag : targetSong->getTags()){
+    removeFromVector(tagToMusic[tag], targetSong);
+  }
 
+  //remove this song from every artist
+  for(auto artist : targetSong->getArtists()){
+    removeFromVector(artistToMusics[artist], targetSong);
+  }
+
+  //remove this song from any of the hashmaps as a key
+  MusicToAlters.erase(targetSong);
+
+  
+  //if a remix, remove it as a remix, if mashup remove it as a mashup
+  switch(targetSong->whatAmI()){
+    case BaseMusic::Remix:
+      // //removes it as a remix
+      // remixToOriginal.erase(static_cast<Remix*>(targetSong));
+      //removes it from other as a remix
+      removeFromVector(MusicToAlters[static_cast<Remix*>(targetSong)->getOriginal()], targetSong);
+      break;
+    case BaseMusic::Mashup:
+      //remove itself from all of it's compund songs
+      for(auto compound : static_cast<Mashup*>(targetSong)->getCompounds()){
+        removeFromVector(MusicToAlters[compound], targetSong);
+      }
+      break;
+  }
   
   //some wrong happened
   return false;
@@ -119,7 +147,7 @@ bool Library::updateMusic(BaseMusic* targetMusic){
 
 template<class T>
 void removeFromVector(std::vector<T>& elements, T element){
-  for(auto i=elements.begin; i!=elements.end(); i++){
+  for(auto i=elements.begin(); i!=elements.end(); i++){
     if((*i)==element){
       elements.erase(i);
     }  
