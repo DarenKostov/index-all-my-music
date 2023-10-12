@@ -102,7 +102,10 @@ class BaseMusic{
     void removePath(int);
     void removeURL(int);
     void removeTag(int);
-  
+
+
+    //you need the things themselves for these
+    void removeTag(Tag*);
   
   
   

@@ -24,6 +24,13 @@ If not, see <https://www.gnu.org/licenses/>.
     addObject(myObject)
 
   Do NOT use deleteObject() for that purpose
+
+  Known object to that with:
+  BaseMusic
+  Music
+  Remix
+  Mashup
+
   
 */
 

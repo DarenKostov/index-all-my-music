@@ -15,6 +15,16 @@ You should have received a copy of the GNU General Public License along with ind
 If not, see <https://www.gnu.org/licenses/>.
 */
 
+
+/*TODO
+  MAKE SURE THAT EVERY deleteObject METHOD
+  ALSO REMOVES THE POINTER OF OTHER OBJECTS
+  THAT WERE POINTING TO IT
+
+  FOR EXAMPLE REMOVE THE TAG FROM A MUSIC
+  OBJECT THAT HAS THE TAG YOU ARE DELETEING
+*/
+
 #include "library.hxx"
 #include "music/baseMusic.hxx"
 #include <type_traits>
@@ -221,7 +231,26 @@ std::vector<Tag*> Library::getTags(std::string substring){
 }
 
 
+bool Library::addTag(Tag* in){
+  tags.push_back(in);
+  tagToMusic[in]=std::vector<BaseMusic*>();
+}
 
+bool Library::removeTag(Tag* in){
+  removeFromVector(tags, in);
+  tagToMusic.erase(in);
+}
+
+bool Library::deleteTag(Tag* in){
+
+  //make sure no song has this as a tag and point to it
+  for(auto song : tagToMusic[in]){
+    song->removeTag(in);
+  }
+
+  removeTag(in);
+  
+}
 
 
 template<class T>
