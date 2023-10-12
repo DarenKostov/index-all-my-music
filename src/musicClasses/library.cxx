@@ -56,9 +56,13 @@ bool Library::loadFromFile(std::string path){
   return true;
 }
 
+//=== manage music
+
 bool Library::removeMusic(BaseMusic* targetSong){
 
+  //the song is no longer offcially saved
   music.erase(targetSong);
+
   //remove this song from every tag
   for(auto tag : targetSong->getTags()){
     removeFromVector(tagToMusic[tag], targetSong);
@@ -69,8 +73,10 @@ bool Library::removeMusic(BaseMusic* targetSong){
     removeFromVector(artistToMusics[artist], targetSong);
   }
 
-  //remove this song from any of the hashmaps as a key
+  //remove this song from any of the hashmaps/sets as a key
   MusicToAlters.erase(targetSong);
+  sortedByDate.erase(targetSong);
+  sortedByLength.erase(targetSong);
 
   
   //if a remix, remove it as a remix, if mashup remove it as a mashup
@@ -126,12 +132,63 @@ bool Library::addMusic(BaseMusic* targetMusic){
       return false;      
   }
 
+  //add the music to basic sorting data structures
+  music.insert(targetMusic);
+  sortedByDate.insert(targetMusic);
+  sortedByLength.insert(targetMusic);
+
+
+  //add the music and connect it to all of its alters
+  MusicToAlters[targetMusic]=std::vector<BaseMusic*>();
+  //very, very slow:
+  for(auto singularMusic : music){
+
+    //if it exist in any of the originals add it to the vector of the targetMusic
+    switch(singularMusic->whatAmI()){
+      case BaseMusic::Music:
+        break;
+      case BaseMusic::Remix:
+        if(static_cast<Remix*>(singularMusic)->getOriginal()==targetMusic){
+          MusicToAlters[targetMusic].push_back(singularMusic);
+        }
+        break;
+      case BaseMusic::Mashup:
+        {
+          for(auto compound: static_cast<Mashup*>(singularMusic)->getCompounds()){
+            if(compound==targetMusic){
+              MusicToAlters[targetMusic].push_back(singularMusic);
+              break;
+            }
+          }
+          break;
+        }
+      default:
+        //wat
+        break;      
+    }
+  }
+
+
+  //add the music and connect it to all of its tags
+  for(auto tag : targetMusic->getTags()){
+    tagToMusic[tag].push_back(targetMusic);
+  }
+
+  //add the music and connect to all of its artists
+  for(auto artist : targetMusic->getArtists()){
+    artistToMusics[artist].push_back(targetMusic);
+  }
   
+  //add the music and connect to all of its publisher
+  publisherToMusics[targetMusic->getPublisher()].push_back(targetMusic);
+
+  MusicToAlters[targetMusic]=std::vector<BaseMusic*>();
 }
 
-bool addMusic(Music*);
-bool addRemix(Remix*);
-bool addMashup(Mashup*);
+bool Library::addMusic(Music* targetMusic){}
+bool Library::addRemix(Remix* targetMusic){}
+bool Library::addMashup(Mashup* targetMusic){}
+
 
 bool Library::updateMusic(BaseMusic* targetMusic){
   //use this instead:
@@ -144,6 +201,25 @@ bool Library::updateMusic(BaseMusic* targetMusic){
 
   return false;
 }
+
+//=== retrieve/manage tags
+
+std::vector<Tag*> Library::getTags(std::string substring){
+  std::vector<Tag*> outputTags;
+  
+  for(tags)
+  
+  
+  
+  
+  
+  
+  
+}
+
+
+
+
 
 template<class T>
 void removeFromVector(std::vector<T>& elements, T element){

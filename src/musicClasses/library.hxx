@@ -102,13 +102,13 @@ class Library{
       ~Library();
 
       //deletes everything in the library, any pointers in it will become invalid
-      void clearLibrary();
+      void clearAndDeleteLibrary();
 
       
       //load library from a file path (tags, songs and everything)
       bool loadFromFile(std::string);
 
-      //manage songs
+      //=== manage songs
 
       //removes a song from the library
       bool removeMusic(BaseMusic*);
