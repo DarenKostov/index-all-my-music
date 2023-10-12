@@ -206,15 +206,18 @@ bool Library::updateMusic(BaseMusic* targetMusic){
 
 std::vector<Tag*> Library::getTags(std::string substring){
   std::vector<Tag*> outputTags;
+
+  //go through all tags and then through all aliases and check if the inputeed string is a substring of any of the aliases
+  for(auto tag : tags){
+    for(auto alias : tag->getAliases()){
+      if(alias.find(substring)!=-1){
+        outputTags.push_back(tag);
+        break;
+      }
+    }
+  }
   
-  for(tags)
-  
-  
-  
-  
-  
-  
-  
+  return outputTags;  
 }
 
 
