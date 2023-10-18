@@ -173,8 +173,8 @@ class Library{
       //=== retrieve songs
       
       //gives you a list of songs, give you provide a tag in the form of a string or the a Tag itself
-      std::vector<BaseMusic*> giveMeSongasBasedOnTag(std::string);
-      std::vector<BaseMusic*> giveMeSongasBasedOnTag(Tag*);
+      std::vector<BaseMusic*> giveMeSongsBasedOnTag(std::string);
+      std::vector<BaseMusic*> giveMeSongsBasedOnTag(Tag*);
       
       //gives you a list of songs (including remixes and mashups), give you provide a tag in the form of a string or the a Tag itself
       std::vector<BaseMusic*> giveMeSongsBasenOnTagInclusive(std::string);
