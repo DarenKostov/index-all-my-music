@@ -31,10 +31,25 @@ class Artist{
 
   private:
     std::string name;
-    std::vector<BaseMusic*> musicMade;
+    // std::vector<BaseMusic*> musicMade;
     std::unordered_map<std::string, std::string> contactsOrWebsites;
 
   public:
+
+    //gives you the nae of the artist
+    std::string getName();
+
+    //set the name of the artist
+    void setName(std::string);
+
+    //gives you all the contact information of the artist
+    std::unordered_map<std::string, std::string> getContactsAndWebsites();
+
+    //removes contact information of the artist  
+    bool removeContactOrWebsite(std::string);
+
+    //adds contact information to the artist
+    bool addContactOrWebsite(std::string, std::string);
   
 };
 

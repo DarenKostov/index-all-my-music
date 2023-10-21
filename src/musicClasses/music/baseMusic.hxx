@@ -77,6 +77,7 @@ class BaseMusic{
     void setName(std::string);
     void setLength(unsigned int);
     void setDate(time_t);
+    void setPublisher(Artist*);
     
     //==getters
   
@@ -94,7 +95,7 @@ class BaseMusic{
     void addPath(std::string);
     void addURL(std::string);
     void addTag(Tag);
-  
+    void addArtist(Artist*);
   
     //==removers
 
@@ -102,6 +103,7 @@ class BaseMusic{
     void removePath(int);
     void removeURL(int);
     void removeTag(int);
+    void removeArtist(Artist*);
 
 
     //you need the things themselves for these

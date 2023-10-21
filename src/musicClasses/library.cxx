@@ -27,6 +27,7 @@ If not, see <https://www.gnu.org/licenses/>.
 
 #include "library.hxx"
 #include "music/baseMusic.hxx"
+#include <cctype>
 #include <queue>
 #include <type_traits>
 #include <unordered_map>
@@ -38,6 +39,11 @@ void removeFromVector(std::vector<T>&, T);
 //gives you all the alters, simple! I use std::set because duplicates can exist and that would be less than ideal :/
 std::set<BaseMusic*> giveMeAllAlters(const BaseMusic*, std::unordered_map<BaseMusic*, std::vector<BaseMusic*>>&);
 
+//gives you an all upper case version of the string
+std::string getUpperCase(std::string);
+
+//gives you an all lower case version of the string
+std::string getLowerCase(std::string);
 
 Library::Library(){
   
@@ -249,7 +255,7 @@ bool Library::removeTag(Tag* in){
 
 bool Library::deleteTag(Tag* in){
 
-  //make sure no song has this as a tag and point to it
+  //make sure no song has this as a tag and points to it
   for(auto song : tagToMusic[in]){
     song->removeTag(in);
   }
@@ -258,58 +264,97 @@ bool Library::deleteTag(Tag* in){
 
 //=== manage artists & publishers
 
+
+std::vector<Artist*> Library::getArtists(std::string pattern){
+  pattern=getLowerCase(pattern);
+  std::vector<Artist*> output;
+
+  //find all artists' names that contain the pattern
+  for(auto artist : artistToMusics){
+    if(getLowerCase(artist.first->getName()).find(pattern)!=-1){
+      output.push_back(artist.first);
+    }
+  }
+
+  return output;  
+}
+
+std::vector<Artist*> Library::getPublishers(std::string pattern){
+  pattern=getLowerCase(pattern);
+  std::vector<Artist*> output;
+
+  //find all publishers' names that contain the pattern
+  for(auto publisher : publisherToMusics){
+    if(getLowerCase(publisher.first->getName()).find(pattern)!=-1){
+      output.push_back(publisher.first);
+    }
+  }
+
+  return output;  
+}
+
+std::vector<Artist*> Library::getArtistsAndPublishers(std::string pattern){
+  pattern=getLowerCase(pattern);
+  std::vector<Artist*> output;
+
+  //find all artists' names that contain the pattern
+  for(auto artist : artists){
+    if(getLowerCase(artist->getName()).find(pattern)!=-1){
+      output.push_back(artist);
+    }
+  }
+
+  return output;  
+}
+
+
+
+
 bool Library::addArtist(Artist* in){
   artists.push_back(in);
   artistToMusics[in]=std::vector<BaseMusic*>();
-
-  std::vector<BaseMusic*>& linkedMusicToArtist=artistToMusics[in];
-
-  //probably not needed :/ vvvvv
-  //add all the songs that have this artits as an artist
-  //very slow
-  for(auto song : music){
-    for(auto artist : song->getArtists()){
-      if(artist==in){
-        linkedMusicToArtist.push_back(song);
-        break; //break because we know the song has the artist, no need to check the other artists
-      }
-    }
-  }
-  
+  //no need to add the artist to the actual songs, addMusic does that
+  return true;
 }
 
 bool Library::addPublisher(Artist* in){
-  //This should probably look exactly like the addArtist code
   artists.push_back(in);
   publisherToMusics[in]=std::vector<BaseMusic*>();
+  return true;
 }
 
-bool Library::removeArtist(Artist* in){
-  removeFromVector(artists, in);
-  artistToMusics.erase(in);
+bool Library::eraseAsArtist(Artist* artist){
+  
+  for(auto song : publisherToMusics[artist]){
+    song->removeArtist(artist);
+  }
+  artistToMusics.erase(artist);
+  return true;
+}
+
+bool Library::eraseAsPublisher(Artist* publisher){
+  for(auto song : publisherToMusics[publisher]){
+    song->setPublisher(nullptr);
+  }
+  publisherToMusics.erase(publisher);
+  return true;
+
 }
 
 
-bool Library::removePublisher(Artist* in){
-  removeFromVector(artists, in);
-  publisherToMusics.erase(in);
-}
 
-bool Library::deleteArtist(Artist* in){
-  if(!removeArtist(in))
+
+
+bool Library::deleteArtistAndPublisher(Artist* in){
+  if(!(eraseAsArtist(in) && eraseAsPublisher(in)))
     return false;
 
-  //this is dangerous, all the pointers in music pointing to the artist will break
+  removeFromVector(artists, in);
   delete in;
+
+  return true;
 }
 
-bool Library::deletePublisher(Artist* in){
-  if(!removePublisher(in))
-    return false;
-
-  //this is dangerous, all the pointers in music pointing to the publisher will break
-  delete in;
-}
 
 
 //=== song retreval
@@ -397,6 +442,13 @@ std::set<BaseMusic*> giveMeAllAlters(const BaseMusic* alter, std::unordered_map<
   return output;
 }
 
+std::vector<BaseMusic*> Library::giveMeSongsBasesOnArtist(std::string artistSubSTring){
+
+
+}
+std::vector<BaseMusic*> Library::giveMeSongsBasesOnArtist(Artist* artist){
+
+}
 
 
 
@@ -410,3 +462,23 @@ void removeFromVector(std::vector<T>& elements, T element){
   }
 
 }
+
+
+std::string getUpperCase(std::string str){
+  for(auto& c : str){
+    c=toupper(c);
+  }
+  return str;
+}
+
+std::string getLowerCase(std::string str){
+  for(auto& c : str){
+    c=tolower(c);
+  }
+  return str;
+}
+
+
+
+
+

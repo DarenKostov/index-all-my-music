@@ -53,7 +53,7 @@ If not, see <https://www.gnu.org/licenses/>.
 
 class Library{
   private:
-    //stores all the music here
+    //stores all the music/tags/artists here
     //might change what data structures store these
     std::set<BaseMusic*> music;
     std::vector<Tag*> tags;
@@ -156,18 +156,25 @@ class Library{
 
       //=== manage artists
 
+      //gives you artists with the given substring in their name
+      std::vector<Artist*> getArtists(std::string);
+      std::vector<Artist*> getPublishers(std::string);
+      std::vector<Artist*> getArtistsAndPublishers(std::string);
+
+      
       //adds an artist to the library
       bool addArtist(Artist*);
       bool addPublisher(Artist*);
 
-      //removes an artist from the library
-      bool removeArtist(Artist*);
-      bool removePublisher(Artist*);
+      //removes the artist/publisher as an artist/publisher. songs will no longer have this person as artist/publisher
+      //This does not delete the artist/publisher! no pointers will be invalidated
+      //the artist/publisher will still be in the artists vector
+      bool eraseAsArtist(Artist*);
+      bool eraseAsPublisher(Artist*);
 
-
-      //deletes an artist, will be gone forever
-      bool deleteArtist(Artist*);
-      bool deletePublisher(Artist*);
+      
+      //deletes an artist/publisher, will be gone forever
+      bool deleteArtistAndPublisher(Artist*);
 
       
       //=== retrieve songs
