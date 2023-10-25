@@ -171,9 +171,14 @@ class Library{
       //the artist/publisher will still be in the artists vector
       bool eraseAsArtist(Artist*);
       bool eraseAsPublisher(Artist*);
+      bool eraseAsArtistAndPublisher(Artist*);
 
+      //just remove the artist/publisher from the library, music will still point to them
+      bool removeAsArtist(Artist*);
+      bool removeAsPublisher(Artist*);
+      bool removeAsArtistAndPublisher(Artist*);
       
-      //deletes an artist/publisher, will be gone forever
+      //deletes an artist/publisher, will be gone forever, will try it's best to remove any pointers to it
       bool deleteArtistAndPublisher(Artist*);
 
       
@@ -181,7 +186,7 @@ class Library{
       
       //gives you a list of songs, give you provide a tag in the form of a string or the a Tag itself
       std::set<BaseMusic*> giveMeSongsBasedOnTag(std::string);
-      std::set<BaseMusic*> giveMeSongsBasedOnTag(Tag*);
+      std::vector<BaseMusic*> giveMeSongsBasedOnTag(Tag*);
       
       //gives you a list of songs (including remixes and mashups), give you provide a tag in the form of a string or the a Tag itself
       std::set<BaseMusic*> giveMeSongsBasenOnTagInclusive(std::string);

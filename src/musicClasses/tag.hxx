@@ -66,6 +66,10 @@ class Tag{
     //tells you weather or not this Tag has a certain alias
     bool hasAlias(std::string);
 
+    //tells you whether there is an alias that has this particular substring
+    bool hasSubstringAsAlias(const std::string&) const;
+
+ 
     //gives you a vector of all the aliases
     std::vector<std::string> getAliases();
 

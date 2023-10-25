@@ -25,6 +25,15 @@ If not, see <https://www.gnu.org/licenses/>.
   OBJECT THAT HAS THE TAG YOU ARE DELETEING
 */
 
+/* some usefull links about vectors and sets
+
+  https://stackoverflow.com/questions/3177241/what-is-the-best-way-to-concatenate-two-vectors
+  https://stackoverflow.com/questions/20052674/how-to-convert-vector-to-set
+  https://stackoverflow.com/questions/7089494/how-to-merge-multiple-sets-into-a-single-stdset-set-union
+  https://www.geeksforgeeks.org/convert-set-to-vector-in-cpp/
+
+*/
+
 #include "library.hxx"
 #include "music/baseMusic.hxx"
 #include <cctype>
@@ -229,14 +238,11 @@ bool Library::updateMusic(BaseMusic* targetMusic){
 std::set<Tag*> Library::getTags(std::string substring){
   std::set<Tag*> outputTags;
 
-  //go through all tags and then through all aliases and check if the inputeed string is a substring of any of the aliases
+  //go through all tags and check if the inputeed string is a substring of any of the aliases
   for(auto tag : tags){
-    for(auto alias : tag->getAliases()){
-      if(alias.find(substring)!=-1){
-        outputTags.push_back(tag);
-        break;
-      }
-    }
+    if(tag->hasSubstringAsAlias(substring)){
+        outputTags.insert(tag);
+    }  
   }
   
   return outputTags;  
@@ -265,42 +271,42 @@ bool Library::deleteTag(Tag* in){
 //=== manage artists & publishers
 
 
-std::vector<Artist*> Library::getArtists(std::string pattern){
+std::set<Artist*> Library::getArtists(std::string pattern){
   pattern=getLowerCase(pattern);
-  std::vector<Artist*> output;
+  std::set<Artist*> output;
 
   //find all artists' names that contain the pattern
   for(auto artist : artistToMusics){
     if(getLowerCase(artist.first->getName()).find(pattern)!=-1){
-      output.push_back(artist.first);
+      output.insert(artist.first);
     }
   }
 
   return output;  
 }
 
-std::vector<Artist*> Library::getPublishers(std::string pattern){
+std::set<Artist*> Library::getPublishers(std::string pattern){
   pattern=getLowerCase(pattern);
-  std::vector<Artist*> output;
+  std::set<Artist*> output;
 
   //find all publishers' names that contain the pattern
   for(auto publisher : publisherToMusics){
     if(getLowerCase(publisher.first->getName()).find(pattern)!=-1){
-      output.push_back(publisher.first);
+      output.insert(publisher.first);
     }
   }
 
   return output;  
 }
 
-std::vector<Artist*> Library::getArtistsAndPublishers(std::string pattern){
+std::set<Artist*> Library::getArtistsAndPublishers(std::string pattern){
   pattern=getLowerCase(pattern);
-  std::vector<Artist*> output;
+  std::set<Artist*> output;
 
   //find all artists' names that contain the pattern
   for(auto artist : artists){
     if(getLowerCase(artist->getName()).find(pattern)!=-1){
-      output.push_back(artist);
+      output.insert(artist);
     }
   }
 
@@ -323,12 +329,35 @@ bool Library::addPublisher(Artist* in){
   return true;
 }
 
+
+
+
+//what a useless set of functions
+bool Library::removeAsArtist(Artist* artist){
+  artistToMusics.erase(artist);
+  return true;
+}
+bool Library::removeAsPublisher(Artist* publisher){
+  publisherToMusics.erase(publisher);
+  return true;
+}
+bool Library::removeAsArtistAndPublisher(Artist* person){
+  if(!(removeAsArtist(person) && removeAsPublisher(person)))
+    return false;
+  return true;
+}
+
+
 bool Library::eraseAsArtist(Artist* artist){
   
   for(auto song : publisherToMusics[artist]){
     song->removeArtist(artist);
   }
-  artistToMusics.erase(artist);
+  
+  if(!removeAsArtist(artist)){
+    return false;
+  }
+  
   return true;
 }
 
@@ -336,17 +365,25 @@ bool Library::eraseAsPublisher(Artist* publisher){
   for(auto song : publisherToMusics[publisher]){
     song->setPublisher(nullptr);
   }
-  publisherToMusics.erase(publisher);
+  if(!removeAsPublisher(publisher)){
+    return false;
+  }
+  
   return true;
 
 }
 
 
+bool Library::eraseAsArtistAndPublisher(Artist* person){
+  if(!(eraseAsArtist(person) && eraseAsPublisher(person)))
+    return false;
+  return true;
+}
 
 
 
 bool Library::deleteArtistAndPublisher(Artist* in){
-  if(!(eraseAsArtist(in) && eraseAsPublisher(in)))
+  if(!eraseAsArtistAndPublisher(in))
     return false;
 
   removeFromVector(artists, in);
@@ -359,16 +396,19 @@ bool Library::deleteArtistAndPublisher(Artist* in){
 
 //=== song retreval
 
-std::vector<BaseMusic*> Library::giveMeSongsBasedOnTag(std::string substring){
-  std::vector<BaseMusic*> output;
+std::set<BaseMusic*> Library::giveMeSongsBasedOnTag(std::string substring){
+  std::set<BaseMusic*> output;
 
-  std::vector<Tag*> tags=getTags(substring);
+  std::set<Tag*> tags=getTags(substring);
 
   for(auto tag : tags){
     std::vector<BaseMusic*> currentMusicWithTag=giveMeSongsBasedOnTag(tag);
-    //https://stackoverflow.com/questions/3177241/what-is-the-best-way-to-concatenate-two-vectors
-    output.reserve(output.size()+currentMusicWithTag.size()); //speeds things up by not allocating again and again? idk
-    output.insert(output.end(), currentMusicWithTag.begin(), currentMusicWithTag.end());
+    //https://stackoverflow.com/questions/20052674/how-to-convert-vector-to-set
+    output.insert(currentMusicWithTag.begin(), currentMusicWithTag.end());
+
+    // //https://stackoverflow.com/questions/3177241/what-is-the-best-way-to-concatenate-two-vectors
+    // output.reserve(output.size()+currentMusicWithTag.size()); //speeds things up by not allocating again and again? idk
+    // output.insert(output.end(), currentMusicWithTag.begin(), currentMusicWithTag.end());
   }
 
   return output;  
@@ -381,53 +421,46 @@ std::vector<BaseMusic*> Library::giveMeSongsBasedOnTag(Tag* tag){
 }
 
 //FIX THIS std::set AND std::vector MESS LATER VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
-std::vector<BaseMusic*> Library::giveMeSongsBasenOnTagInclusive(std::string substring){
+std::set<BaseMusic*> Library::giveMeSongsBasenOnTagInclusive(std::string substring){
   
-  std::set<BaseMusic*> allAlters;
-  std::vector<BaseMusic*> output;
+  std::set<BaseMusic*> output;
 
-  std::vector<Tag*> tags=getTags(substring);
+  std::set<Tag*> tags=getTags(substring);
 
   for(auto tag : tags){
     auto currentMusicWithTag=giveMeSongsBasenOnTagInclusive(tag);
-    allAlters.insert(currentMusicWithTag.begin(), currentMusicWithTag.end());
+    output.insert(currentMusicWithTag.begin(), currentMusicWithTag.end());
   }
 
-  //https://www.geeksforgeeks.org/convert-set-to-vector-in-cpp/
-  output.reserve(allAlters.size());
-  output.assign(allAlters.begin(), allAlters.end());
   return output;
   
 }
 
-//FIX THIS std::set AND std::vector MESS LATER VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 //this feels like a very slow solution, look into it later
-std::vector<BaseMusic*> Library::giveMeSongsBasenOnTagInclusive(Tag* tag){
+std::set<BaseMusic*> Library::giveMeSongsBasenOnTagInclusive(Tag* tag){
   
   auto originalMusic = tagToMusic[tag];
-  std::set<BaseMusic*> allAlters(originalMusic.begin(), originalMusic.end());
-  std::vector<BaseMusic*> output;
+  std::set<BaseMusic*> output(originalMusic.begin(), originalMusic.end());
   
   //get the alters of the music because they technically have the same tag (yeah ik remixes can change the genre of the music, blah, blah, blah)
   //also get the alters of the alters and so on
 
   for(auto original : originalMusic){
     auto alters=giveMeAllAlters(original, MusicToAlters);
-    allAlters.insert(alters.begin(), alters.end());
+    output.insert(alters.begin(), alters.end());
   }
 
-  //https://www.geeksforgeeks.org/convert-set-to-vector-in-cpp/
-  output.reserve(allAlters.size());
-  output.assign(allAlters.begin(), allAlters.end());
   return output;
   
 }
 
 
 std::set<BaseMusic*> giveMeAllAlters(const BaseMusic* alter, std::unordered_map<BaseMusic*, std::vector<BaseMusic*>>& lookUpTable){
+  //the lookUpTable is MusicToAlters, but i feel lookUpTable is more appropriate here 
 
+  
   //https://stackoverflow.com/questions/20052674/how-to-convert-vector-to-set
-  std::vector<BaseMusic*> subAlters=lookUpTable[(BaseMusic*)alter];
+  std::vector<BaseMusic*> subAlters=lookUpTable[(BaseMusic*)alter]; //have it as a const if you're gonna cast it anyway?
   std::set<BaseMusic*> output= std::set(subAlters.begin(), subAlters.end());
 
 
