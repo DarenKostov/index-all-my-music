@@ -193,12 +193,12 @@ class Library{
       std::set<BaseMusic*> giveMeSongsBasenOnTagInclusive(Tag*);
       
       //gives you a list of songs based on who's artist's name or pointer you give
-      std::set<BaseMusic*> giveMeSongsBasesOnArtist(std::string);
-      std::set<BaseMusic*> giveMeSongsBasesOnArtist(Artist*);
+      std::set<BaseMusic*> giveMeSongsBasedOnArtist(std::string);
+      std::vector<BaseMusic*> giveMeSongsBasedOnArtist(Artist*);
   
       //gives you a list of songs based on who's publisher's name or pointer you give
-      std::set<BaseMusic*> giveMeSongsBasesOnPublisher(std::string);
-      std::set<BaseMusic*> giveMeSongsBasesOnPublisher(Artist*);
+      std::set<BaseMusic*> giveMeSongsBasedOnPublisher(std::string);
+      std::vector<BaseMusic*> giveMeSongsBasedOnPublisher(Artist*);
 
       //gives you all the remixes of this song
       std::set<BaseMusic*> giveMeRemixesOfSong(BaseMusic*);
@@ -211,9 +211,17 @@ class Library{
   
       //gives you the original song of a particular remix
       BaseMusic* giveMeOriginalOfRemix(Remix*);
+
+      //gives you the very original song of a particular remix (if this is a remix of a remix, itll give you the original of the 1st remix)
+      BaseMusic* giveMeVeryOriginalOfRemix(Remix*);
   
       //gives you the compound songs of a particular mashup
       std::set<BaseMusic*> giveMeOriginalsOfMashup(Mashup*);
+
+      //gives you the very compound songs of a particular mashup
+      //(if this is a mashup of remixes itll give you the originals of the remixes)
+      //(if this is a mashup of mashups, itll give you the originals of the mashups)
+      std::set<BaseMusic*> giveMeVeryOriginalsOfMashup(Mashup*);
 
       //give it a tag and a vector of songs and itll remove songs with the specified tag
       void removeSongsWithATag(std::string, std::vector<BaseMusic*>&);

@@ -475,13 +475,46 @@ std::set<BaseMusic*> giveMeAllAlters(const BaseMusic* alter, std::unordered_map<
   return output;
 }
 
-std::vector<BaseMusic*> Library::giveMeSongsBasesOnArtist(std::string artistSubSTring){
+std::set<BaseMusic*> Library::giveMeSongsBasedOnArtist(std::string artistSubSTring){
 
+  artistSubSTring=getLowerCase(artistSubSTring);
+  std::set<BaseMusic*> output;
+  
+  for(auto artist : artists){
+    //get all the artists with the matching substring
+    if(getLowerCase(artist->getName()).find(artistSubSTring)!=-1){
+      //add the artist's music to the output
+      std::vector<BaseMusic*> currentArtistMusic=giveMeSongsBasedOnArtist(artist);
+      output.insert(currentArtistMusic.begin(), currentArtistMusic.end());
+    }
+  }
+  
+  return output;
 
 }
-std::vector<BaseMusic*> Library::giveMeSongsBasesOnArtist(Artist* artist){
-
+std::vector<BaseMusic*> Library::giveMeSongsBasedOnArtist(Artist* artist){
+  return artistToMusics[artist];
 }
+
+std::set<BaseMusic*> Library::giveMeSongsBasedOnPublisher(std::string publisherSubSTring){
+  publisherSubSTring=getLowerCase(publisherSubSTring);
+  std::set<BaseMusic*> output;
+  
+  for(auto artist : artists){
+    //get all the publishers with the matching substring
+    if(getLowerCase(artist->getName()).find(publisherSubSTring)!=-1){
+      //add the publisher's music to the output
+      std::vector<BaseMusic*> currentArtistMusic=giveMeSongsBasedOnArtist(artist);
+      output.insert(currentArtistMusic.begin(), currentArtistMusic.end());
+    }
+  }
+  
+  return output;
+}
+std::vector<BaseMusic*> Library::giveMeSongsBasedOnPublisher(Artist* publisher){
+  return publisherToMusics[publisher];
+}
+
 
 
 
@@ -495,6 +528,10 @@ void removeFromVector(std::vector<T>& elements, T element){
   }
 
 }
+
+
+
+
 
 
 std::string getUpperCase(std::string str){
