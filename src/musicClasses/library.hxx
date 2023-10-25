@@ -143,7 +143,7 @@ class Library{
       //=== retrieve/manage tags
 
       //gives you a list of tags that have a substring in their aliases as the given string
-      std::vector<Tag*> getTags(std::string);
+      std::set<Tag*> getTags(std::string);
 
       //adds a tag to the library
       bool addTag(Tag*);
@@ -157,9 +157,9 @@ class Library{
       //=== manage artists
 
       //gives you artists with the given substring in their name
-      std::vector<Artist*> getArtists(std::string);
-      std::vector<Artist*> getPublishers(std::string);
-      std::vector<Artist*> getArtistsAndPublishers(std::string);
+      std::set<Artist*> getArtists(std::string);
+      std::set<Artist*> getPublishers(std::string);
+      std::set<Artist*> getArtistsAndPublishers(std::string);
 
       
       //adds an artist to the library
@@ -180,35 +180,35 @@ class Library{
       //=== retrieve songs
       
       //gives you a list of songs, give you provide a tag in the form of a string or the a Tag itself
-      std::vector<BaseMusic*> giveMeSongsBasedOnTag(std::string);
-      std::vector<BaseMusic*> giveMeSongsBasedOnTag(Tag*);
+      std::set<BaseMusic*> giveMeSongsBasedOnTag(std::string);
+      std::set<BaseMusic*> giveMeSongsBasedOnTag(Tag*);
       
       //gives you a list of songs (including remixes and mashups), give you provide a tag in the form of a string or the a Tag itself
-      std::vector<BaseMusic*> giveMeSongsBasenOnTagInclusive(std::string);
-      std::vector<BaseMusic*> giveMeSongsBasenOnTagInclusive(Tag*);
+      std::set<BaseMusic*> giveMeSongsBasenOnTagInclusive(std::string);
+      std::set<BaseMusic*> giveMeSongsBasenOnTagInclusive(Tag*);
       
       //gives you a list of songs based on who's artist's name or pointer you give
-      std::vector<BaseMusic*> giveMeSongsBasesOnArtist(std::string);
-      std::vector<BaseMusic*> giveMeSongsBasesOnArtist(Artist*);
+      std::set<BaseMusic*> giveMeSongsBasesOnArtist(std::string);
+      std::set<BaseMusic*> giveMeSongsBasesOnArtist(Artist*);
   
       //gives you a list of songs based on who's publisher's name or pointer you give
-      std::vector<BaseMusic*> giveMeSongsBasesOnPublisher(std::string);
-      std::vector<BaseMusic*> giveMeSongsBasesOnPublisher(Artist*);
+      std::set<BaseMusic*> giveMeSongsBasesOnPublisher(std::string);
+      std::set<BaseMusic*> giveMeSongsBasesOnPublisher(Artist*);
 
       //gives you all the remixes of this song
-      std::vector<BaseMusic*> giveMeRemixesOfSong(BaseMusic*);
+      std::set<BaseMusic*> giveMeRemixesOfSong(BaseMusic*);
         
       //gives you all the mashups that use this song
-      std::vector<BaseMusic*> giveMeMashupsOfSong(BaseMusic*);
+      std::set<BaseMusic*> giveMeMashupsOfSong(BaseMusic*);
 
       //gives you all the remixes and mashups of this song
-      std::vector<BaseMusic*> giveMeAltersOfSong(BaseMusic*);
+      std::set<BaseMusic*> giveMeAltersOfSong(BaseMusic*);
   
       //gives you the original song of a particular remix
       BaseMusic* giveMeOriginalOfRemix(Remix*);
   
       //gives you the compound songs of a particular mashup
-      std::vector<BaseMusic*> giveMeOriginalsOfMashup(Mashup*);
+      std::set<BaseMusic*> giveMeOriginalsOfMashup(Mashup*);
 
       //give it a tag and a vector of songs and itll remove songs with the specified tag
       void removeSongsWithATag(std::string, std::vector<BaseMusic*>&);
@@ -223,16 +223,16 @@ class Library{
       void removeSongsWithAPublisher(Tag*, std::vector<BaseMusic*>&);
 
       //get a list of songs that have the given substring in their name
-      std::vector<BaseMusic*> getSongsWithName(std::string);
+      std::set<BaseMusic*> getSongsWithName(std::string);
       
       //get a list of songs that have the given substring in their name, case sensitive
-      std::vector<BaseMusic*> getSongsWithNameCaseSensitive(std::string);
+      std::set<BaseMusic*> getSongsWithNameCaseSensitive(std::string);
 
       //gives you songs that were made/published in a specific time range
-      std::vector<BaseMusic*> getSongsInTimeRange(time_t, time_t);
+      std::set<BaseMusic*> getSongsInTimeRange(time_t, time_t);
   
       //gives you songs that last a duration a between specific durations
-      std::vector<BaseMusic*> getSongsInDurationRange(uint, uint);
+      std::set<BaseMusic*> getSongsInDurationRange(uint, uint);
 
       
   
