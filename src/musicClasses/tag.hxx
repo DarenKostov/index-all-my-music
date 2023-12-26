@@ -98,7 +98,11 @@ class Tag{
     std::vector<std::string> getParents();
 
  
+  private:
 
+    //tells you whetether this index is possible in the alias vector
+    bool indexWithinAliasRange(int);
+  
 };
 
 #endif
