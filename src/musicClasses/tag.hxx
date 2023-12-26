@@ -95,7 +95,7 @@ class Tag{
     bool hasParent(Tag*);
   
     //gives you a vector of all the parents
-    std::vector<std::string> getParents();
+    std::vector<Tag*> getParents();
 
  
   private:

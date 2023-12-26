@@ -63,6 +63,8 @@ void Tag::removeAlias(int aliasIndex){
     //TODO handle exception
     return;
   }
+
+  aliases.erase(aliases.begin()+aliasIndex);
   
   // if the current nameIndex is 0 and we wanna
   // delete the 0th index, the nameIndex will become
@@ -110,5 +112,35 @@ std::vector<std::string> Tag::getAliases(){
 }
 
 
+void Tag::addParent(Tag* tag){
+  //TODO check if the parent already exists, don't add it if so
+  parents.push_back(tag);
+}
+
+void Tag::removeParent(Tag* tag){
+  //TODO handle exception when tag doesn't exist
+  
+  for(auto i=parents.begin(); i!=parents.end(); i++){
+    if((*i)==tag){
+      parents.erase(i);
+      break;
+    }
+  }
+
+}
+
+bool Tag::hasParent(Tag* tag){
+  for(auto i=parents.begin(); i!=parents.end(); i++){
+    if((*i)==tag){
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+std::vector<Tag*> Tag::getParents(){
+  return parents;
+}
 
 
