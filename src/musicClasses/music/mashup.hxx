@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2023 Daren Kostov
+Copyright (c) 2024 Daren Kostov
 
 This file is part of index-all-my-music
 
