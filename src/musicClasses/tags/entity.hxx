@@ -17,26 +17,26 @@ If not, see <https://www.gnu.org/licenses/>.
 
 
 
-#ifndef ARTIST
-#define ARTIST
+#ifndef ENTITY
+#define ENTITY
 
-#include "music/baseMusic.hxx"
+#include "tag.hxx"
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 
 
-class Artist{
+class Entity: public Tag{
 
   private:
     std::string name;
     // std::vector<BaseMusic*> musicMade;
-    std::unordered_map<std::string, std::string> contactsOrWebsites;
+    // std::unordered_map<std::string, std::string> contactsOrWebsites;
 
   public:
 
-    //gives you the nae of the artist
+    //gives you the name of the artist
     std::string getName();
 
     //set the name of the artist

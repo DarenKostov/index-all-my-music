@@ -43,12 +43,12 @@ If not, see <https://www.gnu.org/licenses/>.
 
 #include <set>
 #include <unordered_map>
-#include "tag.hxx"
+#include "tags/tag.hxx"
 #include "music/baseMusic.hxx"
 #include "music/music.hxx"
 #include "music/remix.hxx"
 #include "music/mashup.hxx"
-#include "artist.hxx"
+#include "tags/entity.hxx"
 
 
 class Library{
@@ -57,7 +57,7 @@ class Library{
     //might change what data structures store these
     std::set<BaseMusic*> music;
     std::vector<Tag*> tags;
-    std::vector<Artist*> artists;
+    // std::vector<Entity*> entities;
 
     //what tags a song has
     //if it is a remix it should include tags that describe what was midified
@@ -67,17 +67,17 @@ class Library{
     //this BaseMusic* as key because you can get a remix of a remix of a mashup of an original song
     std::unordered_map<BaseMusic*, std::vector<BaseMusic*>> MusicToAlters;
 
-    // //you give it a remix and it gives you the original
-    // std::unordered_map<Remix*, BaseMusic*> remixToOriginal;
+    //you give it a remix and it gives you the original
+    std::unordered_map<Remix*, BaseMusic*> remixToOriginal;
 
-    // //you give it a mashup and it gives you the originals in the form of a vector
-    // std::unordered_map<Mashup*, std::vector<BaseMusic*>> mashupToOriginals;
+    //you give it a mashup and it gives you the originals in the form of a vector
+    std::unordered_map<Mashup*, std::vector<BaseMusic*>> mashupToOriginals;
 
     //get the songs an artist has made
-    std::unordered_map<Artist*, std::vector<BaseMusic*>> artistToMusics;
+    std::unordered_map<Entity*, std::vector<BaseMusic*>> artistToMusics;
 
-    //get the songs a publisher has posted, again this isnt a company, its the person who uploaded the song
-    std::unordered_map<Artist*, std::vector<BaseMusic*>> publisherToMusics;
+    //get the songs an uploader has posted,
+    std::unordered_map<Entity*, std::vector<BaseMusic*>> uploaderToMusics;
 
     // //get the artist of a song
     // std::unordered_map<BaseMusic*, Artist*> musicToArtist;

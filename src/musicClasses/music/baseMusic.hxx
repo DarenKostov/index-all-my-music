@@ -21,8 +21,8 @@ If not, see <https://www.gnu.org/licenses/>.
 #ifndef BASE_MUSIC
 #define BASE_MUSIC
 
-#include "../tag.hxx"
-// #include "../artist.hxx"
+#include "../tags/tag.hxx"
+#include "../tags/entity.hxx"
 #include <string>
 #include <vector>
 #include <ctime>
@@ -49,10 +49,10 @@ class BaseMusic{
     std::string name;
 
     //the artist(s) who made the song
-    std::vector<Artist*> artists;
+    std::vector<Entity*> artists;
 
-    //the person who published the song on the given platform, not publisher of the song itself
-    Artist* publisher;
+    //the entity who uploaded the song on the given platform
+    Entity* uploader;
   
     //when was this music made/published
     time_t dateOfMaking;

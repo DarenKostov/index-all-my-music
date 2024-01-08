@@ -25,6 +25,10 @@ If not, see <https://www.gnu.org/licenses/>.
 
 class Tag{
 
+  public:
+    //an entity is aperson or a company, they might upload or create music
+    enum type{Generic, Entity};
+  
   private:
 
     //all of the aliases of this tag
@@ -54,6 +58,9 @@ class Tag{
     //deconstructor
     ~Tag();
 
+    //tells you what kind of tag this is: generic, entity, etc
+    virtual type whatAmI() = 0;
+  
     //gives you the description of this particular tag
     virtual std::string getDescription();
 
@@ -68,6 +75,9 @@ class Tag{
 
     //sets the name of this tag given an index of one of its aliases
     void setName(int);
+
+    //sets the name of this tag given a string, the string will be added as the last alias
+    void setName(std::string);
 
 
     //adds an alias

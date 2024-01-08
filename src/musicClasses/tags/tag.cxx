@@ -32,6 +32,16 @@ Tag::~Tag(){
   //do nothing
 }
 
+std::string Tag::getDescription(){
+  return description;
+}
+
+std::string Tag::setDescription(){
+
+}
+
+
+
 std::string Tag::getName(){
   if(nameIndex<0){
     return "no name";
@@ -51,6 +61,12 @@ void Tag::setName(int newIndex){
   }
   
   nameIndex=newIndex;
+}
+
+void Tag::setName(std::string newName){
+  //add an alias and set it to the name
+  addAlias(newName);
+  setName(aliases.size()-1);
 }
 
 void Tag::addAlias(std::string newAlias){
