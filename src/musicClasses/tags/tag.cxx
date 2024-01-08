@@ -32,6 +32,10 @@ Tag::~Tag(){
   //do nothing
 }
 
+Tag::type Tag::whatAmI(){
+  return Generic;
+}
+
 std::string Tag::getDescription(){
   return description;
 }

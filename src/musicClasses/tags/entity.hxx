@@ -30,17 +30,10 @@ If not, see <https://www.gnu.org/licenses/>.
 class Entity: public Tag{
 
   private:
-    std::string name;
-    // std::vector<BaseMusic*> musicMade;
-    // std::unordered_map<std::string, std::string> contactsOrWebsites;
+    std::unordered_map<std::string, std::string> contactsOrWebsites;
 
   public:
-
-    //gives you the name of the artist
-    std::string getName();
-
-    //set the name of the artist
-    void setName(std::string);
+    type whatAmI();
 
     //gives you all the contact information of the artist
     std::unordered_map<std::string, std::string> getContactsAndWebsites();
@@ -49,7 +42,7 @@ class Entity: public Tag{
     bool removeContactOrWebsite(std::string);
 
     //adds contact information to the artist
-    bool addContactOrWebsite(std::string, std::string);
+    bool setContactOrWebsite(std::string, std::string);
   
 };
 

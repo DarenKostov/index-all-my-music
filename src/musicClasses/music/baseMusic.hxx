@@ -33,19 +33,19 @@ class BaseMusic{
 
   public:
 
-    enum type{Music, Remix, Mashup, Edit_Audio};
+    enum type{Music, Remix, Mashup, Edit_Audio /*will never in my life use this but just in case*/};
 
 
   protected:
 
 
-    //is this music fully documented? all tags, all artists?
+    //is this song fully documented? all tags, all artists?
     bool done;
     
     //tags used to identify the music
     std::vector<Tag*> Tags;
   
-    //the name of the music
+    //the name (title?) of the music
     std::string name;
 
     //the artist(s) who made the song

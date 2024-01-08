@@ -59,7 +59,7 @@ class Tag{
     ~Tag();
 
     //tells you what kind of tag this is: generic, entity, etc
-    virtual type whatAmI() = 0;
+    virtual type whatAmI();
   
     //gives you the description of this particular tag
     virtual std::string getDescription();
