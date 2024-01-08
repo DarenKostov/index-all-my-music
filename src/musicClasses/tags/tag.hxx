@@ -54,6 +54,12 @@ class Tag{
     //deconstructor
     ~Tag();
 
+    //gives you the description of this particular tag
+    virtual std::string getDescription();
+
+    //sets the description of this particular tag
+    virtual std::string setDescription();
+
     //gives you the name of this tag (one of it's aliases)
     std::string getName();
 
